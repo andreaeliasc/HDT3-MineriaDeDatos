@@ -68,3 +68,14 @@ g3<- datos[datos$grupo==3,]
 prop.table(table(g3$Species))*100
 
 plotcluster(datos,km$cluster) 
+
+#silueta
+fviz_cluster(km, data = datos,geom = "point", ellipse.type = "norm")
+
+max(g1["SalePrice"])
+min(g1["SalePrice"])
+max(g2["SalePrice"])
+min(g2["SalePrice"])
+max(g3["SalePrice"])
+min(g3["SalePrice"])
+
