@@ -67,4 +67,4 @@ prop.table(table(g2$Species))*100
 g3<- datos[datos$grupo==3,]
 prop.table(table(g3$Species))*100
 
-plotcluster(datos,km$cluster)
+plotcluster(datos,km$cluster) 
