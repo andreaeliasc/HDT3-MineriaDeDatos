@@ -43,3 +43,28 @@ scatter.smooth(train$YearRemodAdd, train$SalePrice)
 scatter.smooth(train$TotRmsAbvGrd, train$SalePrice)
 scatter.smooth(train$MoSold, train$SalePrice)
 scatter.smooth(train$OverallQual, train$SalePrice)
+
+# Clasificacion por Clustering
+datos <- train[,c("LotFrontage","LotArea","GrLivArea","YearBuilt","BsmtUnfSF","TotalBsmtSF","X1stFlrSF","GarageYrBlt","GarageArea","YearRemodAdd", "SalePrice")]
+
+datos <- na.omit(datos)
+
+wss <- (nrow(datos)-1)*sum(apply(datos,2,var))
+
+for (i in 2:10) 
+  wss[i] <- sum(kmeans(datos, centers=i)$withinss)
+
+plot(1:10, wss, type="b", xlab="Number of Clusters",  ylab="Within groups sum of squares")
+
+#kmeans
+testsL <- datos[complete.cases(datos),]
+km<-kmeans(datos,3)
+datos$grupo<-km$cluster
+
+g1<- datos[datos$grupo==1,]
+g2<- datos[datos$grupo==2,]
+prop.table(table(g2$Species))*100
+g3<- datos[datos$grupo==3,]
+prop.table(table(g3$Species))*100
+
+plotcluster(datos,km$cluster)
