@@ -78,4 +78,39 @@ max(g2["SalePrice"])
 min(g2["SalePrice"])
 max(g3["SalePrice"])
 min(g3["SalePrice"])
+# ARBOL DE CLASIFICACION
+train<- read.csv("train.csv", stringsAsFactors = FALSE)
+test<- read.csv("test.csv", stringsAsFactors = FALSE)
+train<-train[1:1460,]
+
+test <- na.omit(test)
+
+porciento <- 70/100
+
+datos <- train[,c("LotFrontage","LotArea","GrLivArea","YearBuilt","BsmtUnfSF","TotalBsmtSF","X1stFlrSF","GarageYrBlt","GarageArea","YearRemodAdd", "SalePrice")]
+datos <- na.omit(datos)
+
+cluster <- datos
+km<-kmeans(datos,3)
+datos$grupo<-km$cluster
+datosFiltertree <- datos[,c("LotFrontage","LotArea","GrLivArea","YearBuilt","BsmtUnfSF","TotalBsmtSF","X1stFlrSF","GarageYrBlt","GarageArea","YearRemodAdd", "grupo")]
+
+datosFiltertree
+porciento <- 70/100
+
+set.seed(321)
+trainRowsNumber<-sample(1:nrow(datosFiltertree),porciento*nrow(datosFiltertree))
+train<-datosFiltertree[trainRowsNumber,]
+test<-datosFiltertree[-trainRowsNumber,]
+
+dt_model<-rpart(train$grupo~.,train,method = "class")
+rpart.plot(dt_model)
+
+prediccion <- predict(dt_model, newdata = test[1:10])
+
+columnaMasAlta<-apply(prediccion, 1, function(x) colnames(prediccion)[which.max(x)])
+test$prediccion<-columnaMasAlta
+
+cfm<-table(test$grupo,test$prediccion)
+cfm
 
