@@ -113,4 +113,4 @@ test$prediccion<-columnaMasAlta
 
 cfm<-table(test$grupo,test$prediccion)
 cfm
-
+ 
