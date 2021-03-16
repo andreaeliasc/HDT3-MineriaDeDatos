@@ -113,4 +113,23 @@ test$prediccion<-columnaMasAlta
 
 cfm<-table(test$grupo,test$prediccion)
 cfm
+
+#ARBOL DE REGRESION
+train<- read.csv("train.csv", stringsAsFactors = FALSE)
+test<- read.csv("test.csv", stringsAsFactors = FALSE)
+train<-train[1:1460,]
+
+test <- na.omit(test)
+
+porciento <- 70/100
+
+datos <- train[,c("LotFrontage","LotArea","GrLivArea","YearBuilt","BsmtUnfSF","TotalBsmtSF","X1stFlrSF","GarageYrBlt","GarageArea","YearRemodAdd", "SalePrice")]
+datos <- na.omit(datos)
+
+cluster <- datos
+km<-kmeans(datos,3)
+datos$grupo<-km$cluster
+datosFiltertree <- datos[,c("LotFrontage","LotArea","GrLivArea","YearBuilt","BsmtUnfSF","TotalBsmtSF","X1stFlrSF","GarageYrBlt","GarageArea","YearRemodAdd", "grupo")]
+                      
+        
  
