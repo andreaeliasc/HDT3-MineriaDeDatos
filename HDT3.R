@@ -131,5 +131,22 @@ km<-kmeans(datos,3)
 datos$grupo<-km$cluster
 datosFiltertree <- datos[,c("LotFrontage","LotArea","GrLivArea","YearBuilt","BsmtUnfSF","TotalBsmtSF","X1stFlrSF","GarageYrBlt","GarageArea","YearRemodAdd", "grupo")]
                       
-        
+datosFiltertree
+
+set.seed(321)
+trainRowsNumber<-sample(1:nrow(datosFiltertree),porciento*nrow(datosFiltertree))
+train<-datosFiltertree[trainRowsNumber,]
+test<-datosFiltertree[-trainRowsNumber,]
+
+modeloRF1<-randomForest(train$grupo~.,train)
+prediccionRF1<-predict(modeloRF1,newdata = test)
+testCompleto<-test
+testCompleto$predRF<-prediccionRF1
+testCompleto$predRF<-round(testCompleto$predRF)
+cfmRandomForest <- table(testCompleto$predRF, testCompleto$grupo)
+plot(cfmRandomForest);text(cfmRandomForest)
+
+cfmRandomForest <- confusionMatrix(table(testCompleto$predRF, testCompleto$grupo))
+cfmRandomForest
+
  
